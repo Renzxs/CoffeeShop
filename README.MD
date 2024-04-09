@@ -10,7 +10,7 @@ REMAINDER FOR CONTRIBUTORS, PLEASE ALWAYS PULL BEFORE PUSHING!
 1. Clone this repository:
 
 ```
-$ git clone https://github.com/Renzxs/ElectriVision.git
+$ git clone 
 ```
 
 2. After making changes in the reposities, add it to the stack:
