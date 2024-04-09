@@ -19,10 +19,6 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
-    path('admin/',include('ingr_supp.urls')),
-    path('order-api/',include('ordermodule.urls')),
-=======
     path('ingr_supp/',include('ingr_supp.urls')),
->>>>>>> de85c8cb49f9a5585342963b6e02983b1d5c1615
+    path('order_api/', include('ordermodule.urls'))
 ]
