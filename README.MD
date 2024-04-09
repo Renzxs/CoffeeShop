@@ -10,7 +10,7 @@ REMAINDER FOR CONTRIBUTORS, PLEASE ALWAYS PULL BEFORE PUSHING!
 1. Clone this repository:
 
 ```
-$ git clone 
+$ git clone https://github.com/Renzxs/CoffeeShop.git
 ```
 
 2. After making changes in the reposities, add it to the stack:
