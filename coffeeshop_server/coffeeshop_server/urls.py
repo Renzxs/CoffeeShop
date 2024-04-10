@@ -20,4 +20,5 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ingr_supp/',include('ingr_supp.urls')),
+    path('order_api/', include('ordermodule.urls'))
 ]
