@@ -3,6 +3,7 @@ from rest_framework import generics,status
 from rest_framework.response import Response
 from ..models import Order
 from ..serializers import OrderSerializer
+from datetime import datetime
 
 # Create your views here.
 
@@ -13,19 +14,32 @@ class GetOrders(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Order.objects.all()
-
-        # Get query parameters from the request
+        
+        # --------------- ORDER QUERIES ---------------
         customer_id = self.request.query_params.get('customer_id', None)
         status = self.request.query_params.get('status', None)
 
-        # Filter queryset based on query parameters
         if customer_id is not None:
             queryset = queryset.filter(customer_id=customer_id)
-
-        # For view order history
         if status in ['Delivered', 'Failed to deliver']:
             queryset = queryset.filter(status=status)
-    
+            
+            
+        # --------------- SALES REPORT QUERIES ---------------
+
+        # Gets the total numbers of orders Per Month
+        getMonthOrders = self.request.query_params.get('getMonthOrders', None)
+
+        if getMonthOrders is not None:
+            months = {
+                'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
+                'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
+            }
+            month_number = months.get(getMonthOrders)
+
+            if month_number is not None:
+                queryset = queryset.filter(datetime__month=month_number)
+        
         return queryset
 
 class CreateOrder(generics.CreateAPIView):
