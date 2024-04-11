@@ -7,10 +7,10 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ["id", 
                   "customer_id", 
-                  "product_id",
+                #   "product_id",
                   "rider_id",
                   "payment_method",
-                  "quantity",
+                #   "quantity",
                   "total_amount",
                   "datetime",
                   "location_address",
@@ -25,7 +25,8 @@ class CartSerializer(serializers.ModelSerializer):
                   "customer_id",
                   "product_id",
                   "quantity",
-                  "total_amount",]
+                  "total_amount",
+                  "order_id"]
         
 # Other Module Serializer
 class CustomerSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics,status
 from rest_framework.response import Response
-from ..models import Order
+from ..models import Order, Cart
 from ..serializers import OrderSerializer
 from datetime import datetime
 import os
@@ -46,20 +46,26 @@ class GetOrders(generics.ListAPIView):
         return queryset
 
 class CreateOrder(generics.CreateAPIView):
-    # Post Request (Place Order)
     serializer_class = OrderSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+
+        # Assuming the order creation is successful
+        order = serializer.save()
+
+        # Update cart items with the created order ID
+        cart_items = Cart.objects.filter(customer_id=request.data["customer_id"], order_id=None)
+        for cart_item in cart_items:
+            cart_item.order_id = order  # Assign the order object itself
+            cart_item.save()
+
+        # Additional custom logic if needed
+
         headers = self.get_success_headers(serializer.data)
-        
-        # Check if the order was successfully created
-        success = True  # Assuming the order creation is successful
-        message = "Order placed successfully." if success else "Failed to place order."
-        
-        return Response({"message": message, "success": success}, status=status.HTTP_201_CREATED, headers=headers)
+        message = "Order placed successfully."
+        return Response({"message": message, "success": True, "order_id": order.id}, status=status.HTTP_201_CREATED, headers=headers)
     
 class UpdateOrder(generics.RetrieveUpdateAPIView):
     # Get/Put Request (Modify Orders)
@@ -107,6 +113,7 @@ class DeleteOrder(generics.RetrieveDestroyAPIView):
             message = f"Failed to delete order: {str(e)}"
             return Response({"message": message, "success": success}, status=status.HTTP_400_BAD_REQUEST)
     
+
 def sendSMS(phone_number):
     account_sid = os.environ.get('ACCOUNT_SID')
     auth_token = os.environ.get('AUTH_TOKEN')
