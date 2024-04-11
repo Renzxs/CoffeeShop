@@ -23,8 +23,7 @@ class GetOrders(generics.ListAPIView):
             queryset = queryset.filter(customer_id=customer_id)
         if status in ['Delivered', 'Failed to deliver']:
             queryset = queryset.filter(status=status)
-            
-            
+
         # --------------- SALES REPORT QUERIES ---------------
 
         # Gets the total numbers of orders Per Month
