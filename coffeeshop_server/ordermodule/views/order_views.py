@@ -116,7 +116,7 @@ class DeleteOrder(generics.RetrieveDestroyAPIView):
             message = f"Failed to delete order: {str(e)}"
             return Response({"message": message, "success": success}, status=status.HTTP_400_BAD_REQUEST)
     
-
+    
 def sendSMS(phone_number):
     account_sid = os.environ.get('ACCOUNT_SID')
     auth_token = os.environ.get('AUTH_TOKEN')

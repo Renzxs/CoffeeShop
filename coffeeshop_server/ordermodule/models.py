@@ -22,7 +22,7 @@ class Order(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, default=1)
     # product_id = models.ForeignKey(Product, on_delete=models.CASCADE, default=1)
     rider_id = models.ForeignKey(Rider, on_delete=models.CASCADE, default=1, null=True)
-    payment_method = models.CharField(max_length=50) # Cash on Delivery, GCash & Bank Transfer (BPI, BPO)
+    payment_method = models.CharField(max_length=50, null=True, default="") # Cash on Delivery, GCash & Bank Transfer (BPI, BPO)
     # quantity = models.IntegerField()
     total_amount = models.FloatField(null=True, default="")
     datetime = models.DateTimeField(auto_now_add=True)
