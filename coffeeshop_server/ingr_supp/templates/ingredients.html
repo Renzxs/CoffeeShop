@@ -156,7 +156,33 @@
                                     </div>
                                 </div>
                                 
-                                <button type="button" class="btn btn-danger">DELETE</button>
+                               <!-- Button for deleting ingredient -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ ingredient.id }}">
+                                    DELETE
+                                </button>
+
+                                <!-- Modal for confirming ingredient deletion -->
+                                <div class="modal fade" id="confirmDeleteModal{{ ingredient.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ ingredient.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmDeleteModalLabel{{ ingredient.id }}">Confirm Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this ingredient?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form method="POST" action="{% url 'delete_ingredient' ingredient.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </td>
                         </tr>
                         {% endfor %}

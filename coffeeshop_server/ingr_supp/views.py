@@ -54,3 +54,15 @@ def update_ingredient(request, ingredient_id):
         form = IngrFormUp(instance=ingredient)
     
     return render(request, 'ingredients.html', {'form': form, 'ingredient_id': ingredient_id})
+
+def delete_ingredient(request, ingredient_id):
+    # Retrieve the ingredient object from the database
+    ingredient = get_object_or_404(Ingr, pk=ingredient_id)
+    
+    if request.method == 'POST':
+        # Delete the ingredient from the database
+        ingredient.delete()
+        return redirect('ingr')  # Redirect to the ingredients page after deletion
+    
+    # If the request method is not POST, render a confirmation page
+    return render(request, 'confirm_delete.html', {'ingredient': ingredient})
