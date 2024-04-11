@@ -4,7 +4,11 @@ from rest_framework.response import Response
 from ..models import Order
 from ..serializers import OrderSerializer
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+from twilio.rest import Client
 
+load_dotenv()
 # Create your views here.
 
 # Order CRUD View
@@ -37,7 +41,7 @@ class GetOrders(generics.ListAPIView):
             month_number = months.get(getMonthOrders)
 
             if month_number is not None:
-                queryset = queryset.filter(datetime__month=month_number)
+                queryset = queryset.filter(datetime__month=month_number).values()
         
         return queryset
 
@@ -74,8 +78,11 @@ class UpdateOrder(generics.RetrieveUpdateAPIView):
         self.perform_update(serializer)
 
         if status_before_update != "On the way" and instance.status == "On the way":
+            # Send SMS Notification
+            formatted_phone_number = "+63" + instance.phone_number[1:] 
+            print("Sending SMS to " + formatted_phone_number)
+            sendSMS(formatted_phone_number)
             print("Order status changed to 'On the way'.")
-            # SEND SMS NOTIFICATION HERE
             
         success = True 
         message = "Order updated successfully." if success else "Failed to update order."
@@ -100,3 +107,18 @@ class DeleteOrder(generics.RetrieveDestroyAPIView):
             message = f"Failed to delete order: {str(e)}"
             return Response({"message": message, "success": success}, status=status.HTTP_400_BAD_REQUEST)
     
+def sendSMS(phone_number):
+    account_sid = os.environ.get('ACCOUNT_SID')
+    auth_token = os.environ.get('AUTH_TOKEN')
+    client = Client(account_sid, auth_token)
+
+    try:
+        message = client.messages.create(
+            body="Your order in CoffeeShop is already on the way, please prepare exact payment and expect delivery soon.", 
+            from_=os.environ.get('TWILIO_NUMBER'),
+            to=phone_number
+        )
+        print("Successfully sent SMS!")
+        print(message.sid)
+    except Exception as e:
+        print(f"Failed to send SMS: {e}")
