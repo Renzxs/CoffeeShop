@@ -57,11 +57,14 @@ class CreateOrder(generics.CreateAPIView):
 
         # Update cart items with the created order ID
         cart_items = Cart.objects.filter(customer_id=request.data["customer_id"], order_id=None)
+        total_amount = 0
         for cart_item in cart_items:
+            total_amount += cart_item.total_amount * cart_item.quantity
             cart_item.order_id = order  # Assign the order object itself
             cart_item.save()
 
         # Additional custom logic if needed
+        order = serializer.save(total_amount=total_amount) 
 
         headers = self.get_success_headers(serializer.data)
         message = "Order placed successfully."
