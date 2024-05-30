@@ -16,7 +16,8 @@ class OrderSerializer(serializers.ModelSerializer):
                   "location_address",
                   "phone_number",
                   "method",
-                  "status",]
+                  "status",
+                  "voucher_code"]
         
 class CartSerializer(serializers.ModelSerializer):
     class Meta:

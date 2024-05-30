@@ -30,6 +30,7 @@ class Order(models.Model):
     phone_number = models.CharField(max_length=15, null=True)
     method = models.CharField(max_length=50, default="Delivery") # Pick up & Delivery
     status = models.CharField(max_length=50, default="Pending") # Pending, Canceled, Preparing, Ready for pick up, On the way, Delivered, & Failed to deliver
+    voucher_code = models.CharField(max_length=50, null=True, default="")
 
 class Cart(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, default=1)
